@@ -50,8 +50,8 @@ resource "aws_lb_listener" "quest-listener" {
   load_balancer_arn = aws_lb.quest-elb.arn
   port              = "3000"
   protocol          = "TCP"
-  #ssl_policy        = "ELBSecurityPolicy-2016-08"
-  #certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn = aws_acm_certificate.cert.arn
 
   default_action {
     type             = "forward"
