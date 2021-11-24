@@ -1,23 +1,3 @@
-resource "aws_iam_role" "quest-codebuild-role" {
-  name = "quest-pipeline-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "codebuild.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-  managed_policy_arns = [ "arn:aws:iam::aws:policy/SecretsManagerReadWrite" ]
-}
-# Create IAM Role Policy for the Pipeline.
 resource "aws_iam_role_policy" "quest-ecs-policy" {
   role = aws_iam_role.quest-task-role.id 
 
@@ -154,6 +134,24 @@ resource "aws_iam_role_policy" "quest-ecs-policy" {
 }
 
 
+resource "aws_iam_role_policy" "automate" {
+  name = "automation"
+  role = aws_iam_role.quest-codebuild-role.id
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "*"
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
+}
+
 
 
 resource "aws_iam_role_policy" "quest-build-pipeline-policy" {
@@ -216,6 +214,31 @@ resource "aws_iam_role_policy" "quest-build-pipeline-policy" {
 }
 POLICY
 }
+
+
+
+
+resource "aws_iam_role" "quest-codebuild-role" {
+  name = "quest-pipeline-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "codebuild.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+  managed_policy_arns = [ "arn:aws:iam::aws:policy/SecretsManagerReadWrite" ]
+}
+# Create IAM Role Policy for the Pipeline.
+
 
 resource "aws_iam_role" "quest-task-role" {
   name = "quest-task-role"
