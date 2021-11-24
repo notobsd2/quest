@@ -80,7 +80,7 @@ resource "aws_lb_listener" "quest-listener-ssl" {
 
 
 output "URL" {
-  value = "${aws_lb.quest-elb.dns_name}:3000" 
+  value = "https://${aws_lb.quest-elb.dns_name}" 
   
 }
 

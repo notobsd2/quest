@@ -42,9 +42,27 @@ resource "aws_ecr_repository_policy" "quest-policy" {
 EOF
 }
 
+resource "null_resource" "quest-image-initalizer" {
+  triggers = {
+    ecr_url = data.aws_ecr_repository.quest-repo.repository_url
+  }
+ provisioner "local-exec" {
+   command = "docker build -t ${aws_ecr_repository.quest.repository_url}:${local.image_version} ../ && docker push ${aws_ecr_repository.quest.repository_url}:${local.image_version}" 
+ } 
+
+}
+
 data "aws_ecr_image" "quest" {
   repository_name = aws_ecr_repository.quest.name 
   image_tag       = "latest"
+  depends_on = [
+    aws_ecr_repository.quest,
+    null_resource.quest-image-initalizer
+  ]
+}
+
+data "aws_ecr_repository" "quest-repo" {
+  name = aws_ecr_repository.quest.name 
   depends_on = [
     aws_ecr_repository.quest
   ]

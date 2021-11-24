@@ -1,13 +1,16 @@
+data "aws_region" "current" {}
 resource "aws_subnet" "quest2a" {
   vpc_id     = aws_vpc.quest.id
   cidr_block = "10.0.2.0/24" 
+  availability_zone = "${data.aws_region.current.name}a" 
   tags = {
     Name = "quest"
   }
 }
 resource "aws_subnet" "quest2b" {
   vpc_id     = aws_vpc.quest.id
-  cidr_block = "10.0.3.0/24" 
+  cidr_block = "10.0.3.0/24"
+  availability_zone = "${data.aws_region.current.name}b" 
   tags = {
     Name = "quest"
   }

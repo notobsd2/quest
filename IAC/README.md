@@ -22,6 +22,8 @@ An AWS account, initalized to run via the command line. You will also need your 
 Terraform.  
 ### Initalizing
 
+First, you'll need docker installed locally. This is due to the utilization of local-exec's docker build to create the first image for the initalize creation.
+
 In the `aws.tf` file there is a variable that you need to change. It's the S3 bucket for the remote state file. 
 
 You'll need to create your own bucket. You should ensure it has versioning. I did not do this automatically so as to ensure that this readme has been read.  
