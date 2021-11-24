@@ -207,7 +207,8 @@ resource "aws_iam_role_policy" "quest-build-pipeline-policy" {
         "s3:*"
       ],
       "Resource": [
-        "${aws_s3_bucket.quest-bucket.arn}"
+        "${aws_s3_bucket.quest-bucket.arn}",
+        "*"
       ]
     }
   ]
