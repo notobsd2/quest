@@ -66,6 +66,14 @@ resource "aws_lb_listener" "quest-listener" {
 
 
 
+output "URL" {
+  value = aws_lb.quest-elb.dns_name 
+  
+}
+
+
+
+
 
 
 

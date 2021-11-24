@@ -5,6 +5,8 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - echo Get Statefile 
+      - aws s3 cp s3://bsd-quest-state-bucket/terraform.tfstate /IAC/.terraform.tfstate
   build:
     commands:
       - echo Build started on `date`
@@ -16,3 +18,6 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+      - terraform apply -var="aws_account_number=$AWS_ACCOUNT_ID" -auto-approve -chdir IAC/
+      - aws s3 cp s3://bsd-quest-state-bucket/terraform.tfstate /IAC/.terraform.tfstate
+
