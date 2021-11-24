@@ -15,6 +15,7 @@ resource "aws_iam_role" "quest-codebuild-role" {
   ]
 }
 EOF
+  managed_policy_arns = [ "arn:aws:iam::aws:policy/SecretsManagerReadWrite" ]
 }
 # Create IAM Role Policy for the Pipeline.
 resource "aws_iam_role_policy" "quest-ecs-policy" {
