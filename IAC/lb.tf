@@ -50,6 +50,21 @@ resource "aws_lb_listener" "quest-listener" {
   load_balancer_arn = aws_lb.quest-elb.arn
   port              = "3000"
   protocol          = "TCP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.quest.arn
+  }
+  depends_on = [
+   aws_lb_target_group.quest
+  ]
+
+}
+
+resource "aws_lb_listener" "quest-listener-ssl" {
+  load_balancer_arn = aws_lb.quest-elb.arn
+  port              = "443"
+  protocol          = "TLS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn = aws_acm_certificate.cert.arn
 
@@ -64,10 +79,8 @@ resource "aws_lb_listener" "quest-listener" {
 }
 
 
-
-
 output "URL" {
-  value = aws_lb.quest-elb.dns_name 
+  value = "${aws_lb.quest-elb.dns_name}:3000" 
   
 }
 

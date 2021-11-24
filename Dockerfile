@@ -4,5 +4,5 @@ COPY quest/package.json ./package.json
 RUN npm install
 ADD /quest/ .
 EXPOSE 3000
-ENV SECRET_WORD "This was automatically pushed....." 
+ENV SECRET_WORD SSL works.... 
 CMD ["node", "src/000.js"]
