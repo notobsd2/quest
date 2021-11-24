@@ -64,5 +64,32 @@ resource "aws_codebuild_project" "quest-build-pipeline" {
     Environment = "Test"
   }
 }
+
+
+resource "aws_codebuild_source_credential" "github_creds" {
+  auth_type   = "PERSONAL_ACCESS_TOKEN"
+  server_type = "GITHUB"
+  token       = jsondecode(data.aws_secretsmanager_secret_version.github_token.secret_string)["github_token"]
+}
+
+data "aws_secretsmanager_secret_version" "github_token" {
+  secret_id="github/token"
+}
+
+resource "aws_codebuild_webhook" "quest-webhook" {
+  project_name = aws_codebuild_project.quest-build-pipeline.name
+
+  filter_group {
+    filter {
+      type    = "EVENT"
+      pattern = "PUSH"
+    }
+
+    filter {
+      type    = "HEAD_REF"
+      pattern = "master"
+    }
+  }
+}
 ## END PIPELINE ##
 

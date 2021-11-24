@@ -23,6 +23,11 @@ resource "aws_lb_target_group" "quest" {
   protocol = "TCP"
   target_type = "ip"
   vpc_id   = aws_vpc.quest.id
+  health_check {
+    interval = 10
+    healthy_threshold = 2
+    unhealthy_threshold = 2
+  }
   depends_on = [
     aws_lb.quest-elb,
     aws_vpc.quest
@@ -52,6 +57,10 @@ resource "aws_lb_listener" "quest-listener" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.quest.arn
   }
+  depends_on = [
+   aws_lb_target_group.quest
+  ]
+
 }
 
 
