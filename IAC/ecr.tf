@@ -7,6 +7,7 @@ resource "aws_ecr_repository" "quest" {
     }
 
 }
+
 #Create policy for ECR repostiry for quest image. 
 resource "aws_ecr_repository_policy" "quest-policy" {
   repository = aws_ecr_repository.quest.name
@@ -41,4 +42,11 @@ resource "aws_ecr_repository_policy" "quest-policy" {
 EOF
 }
 
+data "aws_ecr_image" "quest" {
+  repository_name = aws_ecr_repository.quest.name 
+  image_tag       = "latest"
+  depends_on = [
+    aws_ecr_repository.quest
+  ]
+}
 ## END ECR ##

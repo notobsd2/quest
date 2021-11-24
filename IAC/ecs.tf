@@ -6,6 +6,7 @@ resource "aws_ecs_service" "quest-ecs-service" {
  propagate_tags = "TASK_DEFINITION" 
  wait_for_steady_state = true
  task_definition = aws_ecs_task_definition.quest-task-definition.arn
+ force_new_deployment = true
  desired_count = 1
 network_configuration {
   subnets = [aws_subnet.quest2a.id , aws_subnet.quest2b.id ]
@@ -28,7 +29,7 @@ resource "aws_ecs_task_definition" "quest-task-definition" {
   container_definitions = jsonencode([
     {
       name      = "quest-container" #TODO: move to variable name container 
-      image     = "${aws_ecr_repository.quest.repository_url}:${local.image_version}" 
+      image     = "${aws_ecr_repository.quest.repository_url}:${local.image_version}@${data.aws_ecr_image.quest.image_digest}" 
       requires_compatibilities = ["FARGATE"]
       cpu       = 512
       memory    = 1024

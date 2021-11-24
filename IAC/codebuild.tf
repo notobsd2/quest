@@ -13,9 +13,10 @@ resource "aws_codebuild_project" "quest-build-pipeline" {
   }
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:1.0"
+    image                       = "aws/codebuild/standard:4.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
+    privileged_mode = true
     environment_variable {
     name = "AWS_ACCOUNT_ID"
     value = var.aws_account_number 
