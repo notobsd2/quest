@@ -51,7 +51,8 @@ resource "aws_ecs_task_definition" "quest-task-definition" {
   ])
   tags = { Name = "quest" }
   depends_on = [
-    aws_iam_role.quest-task-role
+    aws_iam_role.quest-task-role,
+    aws_codebuild_project.quest-build-pipeline
   ]
 }
 resource "aws_ecs_cluster" "quest-cluster" {
